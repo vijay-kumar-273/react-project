@@ -1,0 +1,102 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import "./LoginPage.css"; 
+
+const LoginPage = () => {
+  const [isSignup, setIsSignup] = useState(false);
+  const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
+  const [signupDetails, setSignupDetails] = useState({ name: "", email: "", password: "" });
+
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
+  const handleLoginChange = (e) => {
+    const { name, value } = e.target;
+    setLoginDetails({ ...loginDetails, [name]: value });
+  };
+
+  const handleSignupChange = (e) => {
+    const { name, value } = e.target;
+    setSignupDetails({ ...signupDetails, [name]: value });
+  };
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    alert(`Logging in with email: ${loginDetails.email}`);
+    // Navigate to the home page after login
+    navigate("/");
+  };
+
+  const handleSignupSubmit = (e) => {
+    e.preventDefault();
+    alert(`Signing up with name: ${signupDetails.name}, email: ${signupDetails.email}`);
+  
+    localStorage.setItem("userDetails", JSON.stringify(signupDetails));
+    setIsSignup(false); 
+  };
+
+  return (
+    <div className="login-container">
+      <div className="form-container">
+        {isSignup ? (
+          <form className="signup-form" onSubmit={handleSignupSubmit}>
+            <h2>Signup</h2>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={signupDetails.name}
+              onChange={handleSignupChange}
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={signupDetails.email}
+              onChange={handleSignupChange}
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={signupDetails.password}
+              onChange={handleSignupChange}
+              required
+            />
+            <button type="submit">Signup</button>
+            <p>
+              Already have an account? <span onClick={() => setIsSignup(false)}>Login</span>
+            </p>
+          </form>
+        ) : (
+          <form className="login-form" onSubmit={handleLoginSubmit}>
+            <h2>Login</h2>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={loginDetails.email}
+              onChange={handleLoginChange}
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={loginDetails.password}
+              onChange={handleLoginChange}
+              required
+            />
+            <button type="submit">Login</button>
+            <p>
+              Don't have an account? <span onClick={() => setIsSignup(true)}>Signup</span>
+            </p>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default LoginPage;
