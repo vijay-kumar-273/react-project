@@ -1,0 +1,35 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+const DataFetching = () => {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get('https://jsonplaceholder.typicode.com/posts') // Sample API endpoint
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  }, []);
+
+  return (
+    <div>
+      <h1>Data Fetching Example</h1>
+      {error ? (
+        <p>Error: {error}</p>
+      ) : (
+        <ul>
+          {data.map((item) => (
+            <li key={item.id}>{item.title}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default DataFetching;
